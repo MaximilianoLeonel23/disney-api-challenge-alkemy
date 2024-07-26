@@ -1,5 +1,6 @@
 package com.springboot.disney_api.model;
 
+import com.springboot.disney_api.dto.character.CharacterRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -38,4 +39,12 @@ public class Character {
             inverseJoinColumns = @JoinColumn(name = "series_id")
     )
     private Set<Series> series = new HashSet<>();
+
+    public Character(CharacterRequestDTO c) {
+        this.name = c.name();
+        this.image = c.image().orElse(null);
+        this.age = c.age().orElse(0);
+        this.weight = c.weight().orElse(0.0);
+        this.history = c.history().orElse(null);
+    }
 }
