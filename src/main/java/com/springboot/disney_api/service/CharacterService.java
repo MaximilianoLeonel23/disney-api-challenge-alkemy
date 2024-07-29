@@ -3,6 +3,7 @@ package com.springboot.disney_api.service;
 import com.springboot.disney_api.dto.character.CharacterDetailedResponseDTO;
 import com.springboot.disney_api.dto.character.CharacterRequestDTO;
 import com.springboot.disney_api.dto.character.CharacterResponseDTO;
+import com.springboot.disney_api.dto.character.CharacterUpdateDTO;
 import com.springboot.disney_api.model.Character;
 import com.springboot.disney_api.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +56,26 @@ public class CharacterService {
                     character.getWeight(),
                     character.getHistory());
         } else return null;
+    }
+
+    public CharacterResponseDTO updateCharacter(Long id, CharacterUpdateDTO characterUpdateDTO) {
+        Optional<Character> characterFound = characterRepository.findById(id);
+        if (characterFound.isPresent()) {
+            Character character = characterFound.get();
+            character.updateCharacter(characterUpdateDTO);
+            Character updatedCharacter = characterRepository.save(character);
+            return new CharacterResponseDTO(
+                    character.getId(),
+                    character.getName(),
+                    character.getImage(),
+                    character.getAge(),
+                    character.getWeight(),
+                    character.getHistory());
+
+        } else return null;
+    }
+
+    public void deleteCharacter(Long id) {
+        characterRepository.deleteById(id);
     }
 }
