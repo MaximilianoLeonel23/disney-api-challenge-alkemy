@@ -4,7 +4,6 @@ import com.springboot.disney_api.dto.movie.MovieDetailedResponseDTO;
 import com.springboot.disney_api.dto.movie.MovieRequestDTO;
 import com.springboot.disney_api.dto.movie.MovieResponseDTO;
 import com.springboot.disney_api.dto.movie.MovieUpdateDTO;
-import com.springboot.disney_api.model.Movie;
 import com.springboot.disney_api.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
