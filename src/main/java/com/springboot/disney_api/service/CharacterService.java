@@ -4,6 +4,7 @@ import com.springboot.disney_api.dto.character.CharacterDetailedResponseDTO;
 import com.springboot.disney_api.dto.character.CharacterRequestDTO;
 import com.springboot.disney_api.dto.character.CharacterResponseDTO;
 import com.springboot.disney_api.dto.character.CharacterUpdateDTO;
+import com.springboot.disney_api.dto.movie.MovieResponseDTO;
 import com.springboot.disney_api.model.Character;
 import com.springboot.disney_api.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,17 +46,17 @@ public class CharacterService {
     }
 
     public CharacterDetailedResponseDTO getCharacterById(Long id) {
-        Optional<Character> characterFound = characterRepository.findById(id);
-        if (characterFound.isPresent()) {
-            Character character = characterFound.get();
-            return new CharacterDetailedResponseDTO(
-                    character.getId(),
-                    character.getName(),
-                    character.getImage(),
-                    character.getAge(),
-                    character.getWeight(),
-                    character.getHistory());
-        } else return null;
+        Character character = characterRepository.findById(id).orElseThrow(() -> new RuntimeException("Character not found"));
+
+        List<MovieResponseDTO> movies = character.getMovies().stream().map()
+        return new CharacterDetailedResponseDTO(
+                character.getId(),
+                character.getName(),
+                character.getImage(),
+                character.getAge(),
+                character.getWeight(),
+                character.getHistory());
+
     }
 
     public CharacterResponseDTO updateCharacter(Long id, CharacterUpdateDTO characterUpdateDTO) {

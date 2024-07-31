@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
 public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
-    @Autowired
-    private GenreRepository genreRepository;
 
     public MovieResponseDTO createNewMovie(MovieRequestDTO movieDTO) {
         Movie movie = new Movie(movieDTO);

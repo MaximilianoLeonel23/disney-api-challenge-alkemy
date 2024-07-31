@@ -1,5 +1,7 @@
 package com.springboot.disney_api.service;
 
+import com.springboot.disney_api.dto.character.CharacterResponseDTO;
+import com.springboot.disney_api.dto.genre.GenreResponseDTO;
 import com.springboot.disney_api.dto.movie.MovieDetailedResponseDTO;
 import com.springboot.disney_api.dto.movie.MovieRequestDTO;
 import com.springboot.disney_api.dto.movie.MovieResponseDTO;
@@ -54,19 +56,33 @@ public class SeriesService {
     }
 
     public SeriesDetailedResponseDTO getSeriesById(Long id) {
-        Optional<Series> seriesFound = seriesRepository.findById(id);
-        if (seriesFound.isPresent()) {
-            Series series = seriesFound.get();
-            return new SeriesDetailedResponseDTO(
-                    series.getId(),
-                    series.getTitle(),
-                    series.getImage(),
-                    series.getCreationDate(),
-                    series.getRating(),
-                    series.getSeasons(),
-                    series.getEpisodes()
-            );
-        } else return null;
+        Series series = seriesRepository.findById(id).orElseThrow(() -> new RuntimeException("Series not found"));
+
+        List<GenreResponseDTO> genres = series.getGenres().stream().map(g -> new GenreResponseDTO(
+                g.getId(),
+                g.getName(),
+                g.getImage()
+        )).toList();
+        List<CharacterResponseDTO> characters = series.getCharacters().stream().map(c -> new CharacterResponseDTO(
+                c.getId(),
+                c.getName(),
+                c.getImage(),
+                c.getAge(),
+                c.getWeight(),
+                c.getHistory()
+        )).toList();
+        return new SeriesDetailedResponseDTO(
+                series.getId(),
+                series.getTitle(),
+                series.getImage(),
+                series.getCreationDate(),
+                series.getRating(),
+                series.getSeasons(),
+                series.getEpisodes(),
+                characters,
+                genres
+        );
+
     }
 
     public SeriesResponseDTO updateSeries(Long id, SeriesUpdateDTO body) {
