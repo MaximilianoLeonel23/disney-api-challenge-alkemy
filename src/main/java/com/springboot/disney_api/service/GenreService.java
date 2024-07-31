@@ -2,6 +2,8 @@ package com.springboot.disney_api.service;
 
 import com.springboot.disney_api.dto.genre.GenreDetailedResponseDTO;
 import com.springboot.disney_api.dto.genre.GenreResponseDTO;
+import com.springboot.disney_api.dto.movie.MovieResponseDTO;
+import com.springboot.disney_api.dto.series.SeriesResponseDTO;
 import com.springboot.disney_api.model.Genre;
 import com.springboot.disney_api.repository.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +34,29 @@ public class GenreService {
     }
 
     public GenreDetailedResponseDTO getGenreById(Long id) {
-        Optional<Genre> genreFound = genreRepository.findById(id);
-        if (genreFound.isPresent()) {
-            Genre genre = genreFound.get();
-            return new GenreDetailedResponseDTO(
-                    genre.getId(),
-                    genre.getName(),
-                    genre.getImage()
-            );
-        } else return null;
+        Genre genre = genreRepository.findById(id).orElseThrow(() -> new RuntimeException("Genre not found"));
+        List<MovieResponseDTO> movies = genre.getMovies().stream().map(m -> new MovieResponseDTO(
+                m.getId(),
+                m.getTitle(),
+                m.getImage(),
+                m.getCreationDate(),
+                m.getRating()
+        )).toList();
+        List<SeriesResponseDTO> series = genre.getSeries().stream().map(s -> new SeriesResponseDTO(
+                s.getId(),
+                s.getTitle(),
+                s.getImage(),
+                s.getCreationDate(),
+                s.getRating(),
+                s.getSeasons(),
+                s.getEpisodes()
+        )).toList();
+        return new GenreDetailedResponseDTO(
+                genre.getId(),
+                genre.getName(),
+                genre.getImage(),
+                movies,
+                series
+        );
     }
 }

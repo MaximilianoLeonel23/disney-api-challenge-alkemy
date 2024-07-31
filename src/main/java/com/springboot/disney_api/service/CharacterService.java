@@ -69,7 +69,7 @@ public class CharacterService {
                character.getId(),
                character.getName(),
                character.getImage(),
-               character.getAge(), 
+               character.getAge(),
                character.getWeight(),
                character.getHistory(),
                movies,
