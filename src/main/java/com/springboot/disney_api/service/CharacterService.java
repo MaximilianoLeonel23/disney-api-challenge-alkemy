@@ -5,6 +5,7 @@ import com.springboot.disney_api.dto.character.CharacterRequestDTO;
 import com.springboot.disney_api.dto.character.CharacterResponseDTO;
 import com.springboot.disney_api.dto.character.CharacterUpdateDTO;
 import com.springboot.disney_api.dto.movie.MovieResponseDTO;
+import com.springboot.disney_api.dto.series.SeriesResponseDTO;
 import com.springboot.disney_api.model.Character;
 import com.springboot.disney_api.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,14 +49,32 @@ public class CharacterService {
     public CharacterDetailedResponseDTO getCharacterById(Long id) {
         Character character = characterRepository.findById(id).orElseThrow(() -> new RuntimeException("Character not found"));
 
-        List<MovieResponseDTO> movies = character.getMovies().stream().map()
-        return new CharacterDetailedResponseDTO(
-                character.getId(),
-                character.getName(),
-                character.getImage(),
-                character.getAge(),
-                character.getWeight(),
-                character.getHistory());
+        List<MovieResponseDTO> movies = character.getMovies().stream().map(m -> new MovieResponseDTO(
+                m.getId(),
+                m.getTitle(),
+                m.getImage(),
+                m.getCreationDate(),
+                m.getRating()
+        )).toList();
+        List<SeriesResponseDTO> series = character.getSeries().stream().map(s -> new SeriesResponseDTO(
+                s.getId(),
+                s.getTitle(),
+                s.getImage(),
+                s.getCreationDate(),
+                s.getRating(),
+                s.getSeasons(),
+                s.getEpisodes()
+        )).toList();
+       return new CharacterDetailedResponseDTO(
+               character.getId(),
+               character.getName(),
+               character.getImage(),
+               character.getAge(), 
+               character.getWeight(),
+               character.getHistory(),
+               movies,
+               series
+       );
 
     }
 
