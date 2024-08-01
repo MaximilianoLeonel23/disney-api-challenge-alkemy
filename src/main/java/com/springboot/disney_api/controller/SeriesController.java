@@ -35,8 +35,12 @@ public class SeriesController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SeriesResponseDTO>> getAllSeries() {
-        List<SeriesResponseDTO> series = seriesService.getAllSeries();
+    public ResponseEntity<List<SeriesResponseDTO>> getAllSeries(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) List<Long> genres,
+            @RequestParam(required = false) String order
+    ) {
+        List<SeriesResponseDTO> series = seriesService.getAllSeries(name, genres, order);
         if (series != null) {
             return ResponseEntity.ok(series);
         } else {
