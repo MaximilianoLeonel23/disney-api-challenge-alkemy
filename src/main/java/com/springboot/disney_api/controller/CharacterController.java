@@ -29,8 +29,16 @@ public class CharacterController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<CharacterResponseDTO>> getAllCharacters() {
-        List<CharacterResponseDTO> characters = characterService.getAllCharacters();
+    public ResponseEntity<List<CharacterResponseDTO>> getAllCharacters(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Integer age,
+            @RequestParam(required = false) Double weight,
+            @RequestParam(required = false) List<Long> movies,
+            @RequestParam(required = false) List<Long> series
+    ) {
+        List<CharacterResponseDTO> characters = characterService.getAllCharacters(
+                name, age, weight, movies, series
+        );
         if (characters.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {

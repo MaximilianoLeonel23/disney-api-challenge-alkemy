@@ -34,8 +34,8 @@ public class CharacterService {
         );
     }
 
-    public List<CharacterResponseDTO> getAllCharacters() {
-        List<Character> characters = characterRepository.findAll();
+    public List<CharacterResponseDTO> getAllCharacters(String name, Integer age, Double weight, List<Long> movies, List<Long> series) {
+        List<Character> characters = characterRepository.findAllWithFilters(name, age, weight, movies, series);
         return characters.stream().map(c -> new CharacterResponseDTO(
                 c.getId(),
                 c.getName(),
