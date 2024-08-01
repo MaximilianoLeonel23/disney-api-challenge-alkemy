@@ -14,6 +14,7 @@ import com.springboot.disney_api.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -36,8 +37,19 @@ public class MovieService {
         );
     }
 
-    public List<MovieResponseDTO> getAllMovies() {
-        List<Movie> movies = movieRepository.findAll();
+    public List<MovieResponseDTO> getAllMovies(
+            String name,
+            List<Long> genres,
+            String order
+    ) {
+        List<Movie> movies = movieRepository.findAllWithFilters(name, genres);
+
+        if (order != null && order.equalsIgnoreCase("DESC")) {
+            movies.sort(Comparator.comparing(Movie::getCreationDate).reversed());
+        } else if (order != null && order.equalsIgnoreCase("ASC")) {
+            movies.sort(Comparator.comparing(Movie::getCreationDate));
+        }
+
         if (!movies.isEmpty()) {
             return movies.stream().map(m -> new MovieResponseDTO(
                     m.getId(),

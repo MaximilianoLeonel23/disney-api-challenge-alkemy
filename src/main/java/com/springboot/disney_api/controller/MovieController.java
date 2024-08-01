@@ -7,6 +7,7 @@ import com.springboot.disney_api.dto.movie.MovieUpdateDTO;
 import com.springboot.disney_api.service.MovieService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -30,8 +31,12 @@ public class MovieController {
     }
 
     @GetMapping
-    public ResponseEntity<List<MovieResponseDTO>> getAllMovies() {
-        List<MovieResponseDTO> movies = movieService.getAllMovies();
+    public ResponseEntity<List<MovieResponseDTO>> getAllMovies(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) List<Long> genres,
+            @RequestParam(required = false) String order
+    ) {
+        List<MovieResponseDTO> movies = movieService.getAllMovies(name, genres, order);
         if (movies != null) {
             return ResponseEntity.ok(movies);
         } else {
