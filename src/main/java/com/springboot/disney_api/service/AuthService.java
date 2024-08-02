@@ -18,13 +18,21 @@ public class AuthService {
     @Autowired
     private TokenService tokenService;
 
-    public SignUpResponseDTO signUp(SignUpRequestDTO signUpRequestDTO) {
+    @Autowired
+    private EmailService emailService;
+
+    public SignUpResponseDTO signUp(SignUpRequestDTO signUpRequestDTO)  {
         String passwordEncoded = encoder.encode(signUpRequestDTO.password());
         User newUser = new User(
                 signUpRequestDTO.username(),
                 signUpRequestDTO.email(),
                 passwordEncoded);
         User savedUser = userRepository.save(newUser);
+
+        emailService.sendEmail(savedUser.getEmail(),
+                "Hello " + savedUser.getUsername() + "! Welcome to Disney API",
+                "Enjoy our API with your favourites Disney characters, movies and series");
+
         UserResponseDTO userDTO = new UserResponseDTO(
                 savedUser.getId(),
                 savedUser.getUsername(),
