@@ -2,6 +2,7 @@ package com.springboot.disney_api.model;
 
 import com.springboot.disney_api.dto.series.SeriesRequestDTO;
 import com.springboot.disney_api.dto.series.SeriesUpdateDTO;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
